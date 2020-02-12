@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container gallery-container">
+  
+    <h1 class="text-center">Bootstrap 3 Gallery</h1>
+  
+    <p class="page-description text-center">Grid Layout With Zoom Effect</p>
+      
+    <div class="tz-gallery">
+  
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="card">
+                    <a class="lightbox" href=" {{url_for('static', filename=image_name)}}">
+                    <img src=" {{url_for('static', filename=image_name)}}" alt="Park" class="card-img-top" width = 224 px>
+                    </a>
+                </div>
+            </div>        
+            
+        
+        {% for image in neighbors %}
+            <div class="col-md-4">
+                <div class="card">
+                    <a class="fancybox" href={{image}} rel="lightbox" >
+                    <img src={{image}} class="zoom img-fluid "  alt="" width = 224 px>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}  
+         
+        </div>
+  
+    </div>
+</div>    
+  
+
+{% endblock %}

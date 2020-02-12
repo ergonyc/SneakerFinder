@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if image_name %}
+  <img src=" {{url_for('static', filename=image_name)}}" class="img-fluid img-thumbnail rounded float-left" width = '220 px' >
+{% else %}
+  <h1>No Image Uploaded</h1>
+{% endif %}
+
+<section class="row">
+  {% for image in neighbors %}
+    <section class="col-md-4 col-sm-6">
+        <img src = {{image}} class="img-fluid img-thumbnail rounded float-left" width = '220 px' >
+    </section>
+  {% endfor %}
+</section>
+
+{% endblock %}

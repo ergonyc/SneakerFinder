@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main role="main">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <p class="lead text-muted"> {{ header_copy }} </p>
+
+      <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row">
+            <div class="text-center">
+              <div class="card mb-4 box-shadow">
+                <img class="card-img-top" src=" {{ url_for( 'image_from_upload_file', filename=image_name ) }}" alt="Card image cap"
+                  width='300 px'>
+                <div class="card-body">
+                  <p class="card-text">
+                    <div class="d-flex justify-content-between align-items-center">
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- <div class="card">
+          <div class="card-body text-center d-flex justify-content-center align-items-center flex-column">
+            <p> <button is currently broken> </button></p>
+            <button id="color-picker-5" class="btn btn-primary btn-sm">Color Picker</button>
+          </div>
+        </div> -->
+      <!-- 
+        <div class="card">
+          <div class="card-body text-center d-flex justify-content-center align-items-center flex-column">
+            <p>Click the dark square to activate the Color Picker</p>
+            <div id="color-picker-1" class="mx-auto"></div>
+          </div>
+        </div> -->
+        <!-- <form method="post" action="/filter" class="form-inline">
+          <div class="form-group">
+            <label for="max_budget" class="sr-only">Max Budget ($)</label>
+            <input type="number" class="form-control" id="max_budget" name="max_budget" placeholder="Max Budget ($)">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form> -->
+
+      </div>
+  </section>
+
+
+  {% for num in range(neighbors.shape[0]) %}
+  <div class="col-md-4">
+    <div class="card mb-4 box-shadow">
+      <a class="lightbox" href="{{ neighbors['db_path'][num] }}">
+        <img class="card-img-top" src={{ url_for('image_from_db_file', filename = neighbors['db_path'][num] ) }} alt="Card image cap" width='224 px'>
+        {% if (num > 0) %}
+        <h4> sneaker#{{num+1}}  (dist: {{  '%0.4f'| format(dist[num]|float) }}) </h4>
+        {% else %}
+        <h4> Top choice   (dist: {{ '%.4e' | format(dist[num]|float) }})  </h4>
+        {% endif %}
+        <div class="card-body" width='224 px'>
+          <p class="card-text" width='224 px'>
+            <div class="d-flex justify-content-between align-items-center" width='224 px'>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+  {% endfor %}
+
+  </div>
+  </div>
+
+</main>
+
+{% endblock %}

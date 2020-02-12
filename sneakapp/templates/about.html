@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <main role="main">
+
+      <section class="jumbotron text-center">
+        <div class="container">
+          <p class="lead text-muted"> 'Sneaker Finder helps you find shoes that match the aesthetic style of shoes you like. 
+                    Sneaker Finder uses a deep learning model to provide examples based on your provided source of inspiration. </p>
+
+          <p class="lead text-muted"> Andy Henrie developed Sneaker Finder while a Data Science Fellow at Insight.   </p>
+        </div>
+      </section>
+
+      
+    <embed class="embed-responsive-item" src="{{ url_for('static', filename='sneakers Demo_final.pdf')}}" type="application/pdf" internalinstanceid="9" width="500">
+
+    </div>
+
+    </main>
+
+{% endblock %}
