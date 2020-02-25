@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import json
 
-from .model_utils import nearest_neighbor_image_finder
+#from .model_utils import nearest_neighbor_image_finder
 
 from werkzeug.utils import secure_filename
 import os
@@ -25,7 +25,7 @@ from tensorflow.keras.applications import imagenet_utils
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
-
+from sklearn.neighbors import NearestNeighbors
 
 pwidth = 224
 pheight = 224
@@ -60,6 +60,7 @@ MEDIA_FOLDER =  app.config['MEDIA_FOLDER'] = MEDIA_FOLDER
 #         img_features = network_model.predict(img_vector)
 
 
+    
 
 
 db_base = 'database' #'../database'
@@ -70,6 +71,21 @@ database_json = json.load(open(database_path))
 database_df = pd.DataFrame(database_json)
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+##### pre-compute the nearest neighbors and then just query...
+# get 9 nearest neighbors
+n_neighs = 9
+            
+#logic here in case the n exceeds number of items in database
+size_filter_frame = database_df.shape[0]
+num_neighs = min(n_neighs, size_filter_frame)
+
+#Fit Nearest Neighbor Model
+database_features = np.vstack(database_df['image_features'])    
+neighs = NearestNeighbors(n_neighbors=num_neighs) 
+neighs.fit(database_features)
+
+
 
 
 
@@ -131,25 +147,28 @@ def upload_file():
                 #print(type(img_features))
  
             # get 9 nearest neighbors
-            n_neighs = 9
-            nn_index, neighbors,distance = nearest_neighbor_image_finder(img_features, n_neighs, database_df) 
-   
+            # n_neighs = 9
+            # nn_index, neighbors,distance = nearest_neighbor_image_finder(img_features, n_neighs, database_df) 
+
+            dist, nn_index = neighs.kneighbors(img_features, return_distance=True)
+            distance = dist.tolist()[0] 
+
             # fix path to the database...
             neighbors = database_df.iloc[nn_index.tolist()[0]].copy()
             neighbors.loc[:,'db_path'] = neighbors.loc[:,'path'].astype(str).copy()
 
-            #neighbors_db.loc[:,'db_path'] = neigh_path
+        
             #neighbors = neighbors_db # this line is where the "filtering" should occur if we add handles on website 
     
     #image_name = os.path.join('images',filename)
 
-    print(f'saved: {img_path}')
-    print(f'<upload path>: {UPLOAD_FOLDER}')
-    print(f'image: {filename}')
+    # print(f'saved: {img_path}')
+    # print(f'<upload path>: {UPLOAD_FOLDER}')
+    # print(f'image: {filename}')
 
     npath = neighbors['db_path'][0] 
-    print(f'saved: {npath}')
-    print(f'<media path>: {MEDIA_FOLDER}')   
+    # print(f'saved: {npath}')
+    # print(f'<media path>: {MEDIA_FOLDER}')   
 
     header_copy = 'your example:'
     return render_template('album.html', header_copy = header_copy, image_name = filename, neighbors = neighbors, dist=distance)
