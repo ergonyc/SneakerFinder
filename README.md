@@ -9,3 +9,15 @@ Future iterations to include:
   - transfer learning representation
   - beta-VAE representation
   - design aid tool to automatically generate initial designs based on a "brief" of text input and exaple pictures in order to increase the speed and efficacy of the design process.
+
+
+
+# DATABASE / EDA repository
+https://github.com/ergonyc/UT_Zappos_DB
+
+
+note:  this repository is structured to be stand-alone such that it is plug-and-play in AWS
+
+TODO:  nginx & environment script for automating AWS deployment.
+TODO:  dockerize
+TODO: streamlit port
